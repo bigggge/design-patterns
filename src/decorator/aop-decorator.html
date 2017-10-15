@@ -1,0 +1,53 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Decorator</title>
+</head>
+<body>
+<form name="myform">
+    <label for="username">Username</label>
+    <input id="username" type="text"/>
+    <label for="password">password</label>
+    <input id="password" type="password"/>
+    <input id="btn" type="button" value="提交"/>
+</form>
+</body>
+<script>
+
+    var username = document.getElementById('username');
+    var password = document.getElementById('password');
+    var btn = document.getElementById('btn');
+
+    Function.prototype.before = function (beforefn) {
+        var __self = this;
+        return function () {
+            if (beforefn.apply(this, arguments) === false) {
+                return;
+            }
+            return __self.apply(this, arguments);
+        }
+    };
+
+    var validate = function () {
+        if (username.value === '') {
+            alert('用户名不能为空');
+            return false;
+        }
+        if (password.value === '') {
+            alert('密码不能为空');
+            return false;
+        }
+    };
+
+    var submit = function () {
+        alert('ok')
+    };
+
+    submit = submit.before(validate);
+
+    btn.onclick = function () {
+        submit();
+    }
+
+</script>
+</html>
